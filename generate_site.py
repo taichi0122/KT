@@ -31,6 +31,26 @@ WEIGHTS = {
 }
 LANE_BASE = {1: 20, 2: 6, 3: 4, 4: 2, 5: 1, 6: 0.5}
 
+# コース(枠)の公式カラー。番号チップの背景/文字色に使う
+LANE_COLOR = {
+    1: ("#F2F0E9", "#14304A"),
+    2: ("#26262A", "#F2F0E9"),
+    3: ("#D8342A", "#FFFFFF"),
+    4: ("#1E6FD9", "#FFFFFF"),
+    5: ("#E8B72E", "#14304A"),
+    6: ("#2E9E52", "#FFFFFF"),
+}
+# カード左端のアクセント線。2号艇(黒)は暗い背景に埋もれるので視認性の高いグレーに調整
+LANE_ACCENT = {1: "#F2F0E9", 2: "#6B7280", 3: "#D8342A", 4: "#1E6FD9", 5: "#E8B72E", 6: "#2E9E52"}
+
+CLASS_BY_NUMBER = {1: "A1", 2: "A2", 3: "B1", 4: "B2"}
+CLASS_COLOR = {
+    "A1": ("#3A2E12", "#E8B72E", "#5C4A1E"),
+    "A2": ("#22303A", "#8FC7DE", "#2E4552"),
+    "B1": ("#1E2A38", "#8FA9BE", "#2A3D4E"),
+    "B2": ("#1A2028", "#6B7A8A", "#26303C"),
+}
+
 STADIUM_NAMES = {
     1: "桐生", 2: "戸田", 3: "江戸川", 4: "平和島", 5: "多摩川", 6: "浜名湖",
     7: "蒲郡", 8: "常滑", 9: "津", 10: "三国", 11: "びわこ", 12: "住之江",
@@ -84,6 +104,80 @@ def build_exhibition_lookup(previews):
     return lookup
 
 
+def render_boat_card(rank, sc, b, ex_time):
+    lane = b["racer_boat_number"]
+    lane_bg, lane_text = LANE_COLOR.get(lane, ("#0F2438", "#EAF2F8"))
+    accent = LANE_ACCENT.get(lane, "#3EC6E0")
+    cls = CLASS_BY_NUMBER.get(b.get("racer_class_number"), None)
+    cls_bg, cls_text, cls_border = CLASS_COLOR.get(cls, ("#1A2028", "#6B7A8A", "#26303C"))
+
+    marks = ["◎", "○", "▲", "△", "△", "△"]
+    mark = marks[rank] if rank < len(marks) else ""
+    mark_color = "#E8B72E" if rank == 0 else ("#8FA9BE" if rank == 1 else "#D8342A" if rank == 2 else "#5C7A90")
+
+    name = b.get("racer_name", "")
+    age = b.get("racer_age")
+    weight = b.get("racer_weight")
+    nat1 = b.get("racer_national_top_1_percent") or 0
+    nat2 = b.get("racer_national_top_2_percent") or 0
+    nat3 = b.get("racer_national_top_3_percent") or 0
+    loc1 = b.get("racer_local_top_1_percent") or 0
+    loc2 = b.get("racer_local_top_2_percent") or 0
+    loc3 = b.get("racer_local_top_3_percent") or 0
+    motor2 = b.get("racer_assigned_motor_top_2_percent") or 0
+    boat2 = b.get("racer_assigned_boat_top_2_percent") or 0
+    st = b.get("racer_average_start_timing") or 0.17
+    flying = b.get("racer_flying_count") or 0
+    late = b.get("racer_late_count") or 0
+
+    class_badge = (
+        f'<span class="class-badge" style="background:{cls_bg};color:{cls_text};border-color:{cls_border}">{cls}</span>'
+        if cls else ""
+    )
+    meta_bits = [f"登録番号 {b.get('racer_number', b.get('racer_registration_number', '-'))}"]
+    if age is not None:
+        meta_bits.append(f"{age}歳")
+    if weight:
+        meta_bits.append(f"{weight:.1f}kg")
+    meta_row = " ・ ".join(meta_bits)
+
+    return f"""
+    <div class="boat-card" style="border-left:4px solid {accent}">
+      <div class="boat-top">
+        <div class="lane-chip" style="background:{lane_bg};color:{lane_text}">{lane}</div>
+        <div class="boat-info">
+          <div class="boat-name-row">
+            <span class="boat-name">{name}</span>
+            {class_badge}
+            <span class="mark-badge" style="color:{mark_color}">{mark}</span>
+          </div>
+          <div class="boat-meta">{meta_row}</div>
+        </div>
+        <div class="boat-score">
+          <div class="score-val">{sc:.1f}</div>
+          <div class="score-rank">{rank + 1}位</div>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-chip"><div class="stat-label">全国 勝率/2連/3連</div>
+          <div class="stat-value">{nat1:.2f} / {nat2:.1f}% / {nat3:.1f}%</div></div>
+        <div class="stat-chip"><div class="stat-label">当地 勝率/2連/3連</div>
+          <div class="stat-value">{loc1:.2f} / {loc2:.1f}% / {loc3:.1f}%</div></div>
+        <div class="stat-chip"><div class="stat-label">モーター2連率</div>
+          <div class="stat-value">{motor2:.1f}%</div></div>
+        <div class="stat-chip"><div class="stat-label">ボート2連率</div>
+          <div class="stat-value">{boat2:.1f}%</div></div>
+        <div class="stat-chip"><div class="stat-label">展示タイム</div>
+          <div class="stat-value">{ex_time:.2f}秒</div></div>
+        <div class="stat-chip"><div class="stat-label">平均ST</div>
+          <div class="stat-value">{st:.2f}</div></div>
+        <div class="stat-chip"><div class="stat-label">F数 / L数</div>
+          <div class="stat-value">{flying} / {late}</div></div>
+      </div>
+    </div>
+    """
+
+
 def render_race(race, ex_lookup):
     stadium = race["race_stadium_number"]
     race_no = race["race_number"]
@@ -91,27 +185,19 @@ def render_race(race, ex_lookup):
     scored = []
     for b in boats:
         ex = ex_lookup.get((stadium, race_no, b["racer_boat_number"]), 7.1)
-        scored.append((score_boat(b, ex), b))
+        scored.append((score_boat(b, ex), b, ex))
     scored.sort(key=lambda x: -x[0])
 
     venue_name = STADIUM_NAMES.get(stadium, f"場{stadium}")
-    marks = ["◎", "○", "▲", "△", "△", "△"]
-    rows = ""
-    for i, (sc, b) in enumerate(scored):
-        mark = marks[i] if i < len(marks) else ""
-        rows += (
-            f"<tr><td>{mark}</td><td>{b['racer_boat_number']}</td>"
-            f"<td>{b.get('racer_name', '')}</td><td>{sc:.1f}</td></tr>"
-        )
-    formation = "-".join(str(b["racer_boat_number"]) for _, b in scored[:3])
+    formation = "-".join(str(b["racer_boat_number"]) for _, b, _ in scored[:3])
+    cards = "".join(
+        render_boat_card(i, sc, b, ex) for i, (sc, b, ex) in enumerate(scored)
+    )
 
     return f"""
     <div class="race-card">
       <h3>{venue_name} {race_no}R <span class="formation">予想: {formation}</span></h3>
-      <table>
-        <thead><tr><th></th><th>枠</th><th>選手</th><th>score</th></tr></thead>
-        <tbody>{rows}</tbody>
-      </table>
+      {cards}
     </div>
     """
 
@@ -189,10 +275,35 @@ h1 {{ font-size:20px; margin-bottom:4px; }}
 
 .race-card {{ background:#14304A; border:1px solid #1E4560; border-radius:8px;
               padding:12px; margin-bottom:10px; }}
-.race-card h3 {{ margin:0 0 8px; font-size:14px; }}
+.race-card h3 {{ margin:0 0 10px; font-size:14px; }}
 .formation {{ color:#3EC6E0; font-size:12.5px; margin-left:8px; }}
-table {{ width:100%; border-collapse:collapse; font-size:13px; }}
-th, td {{ padding:4px 6px; text-align:left; border-bottom:1px solid #1E4560; }}
+
+.boat-card {{ background:#0F2438; border:1px solid #1E4560; border-radius:8px;
+              padding:10px 12px; margin-bottom:8px; }}
+.boat-top {{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }}
+.lane-chip {{ width:32px; height:32px; min-width:32px; border-radius:7px; display:flex;
+              align-items:center; justify-content:center; font-size:16px; font-weight:900;
+              font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+              border:1px solid rgba(255,255,255,0.15); }}
+.boat-info {{ flex:1; min-width:0; }}
+.boat-name-row {{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; }}
+.boat-name {{ font-size:14px; font-weight:700; color:#F5F9FC; }}
+.class-badge {{ font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:5px;
+                 border:1px solid; font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace; }}
+.mark-badge {{ font-size:11px; font-weight:700; }}
+.boat-meta {{ font-size:10px; color:#5C7A90; margin-top:2px;
+              font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace; }}
+.boat-score {{ text-align:right; min-width:46px; }}
+.score-val {{ font-size:16px; font-weight:900; color:#3EC6E0;
+              font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace; }}
+.score-rank {{ font-size:10px; color:#5C7A90; }}
+
+.stat-grid {{ display:grid; grid-template-columns:repeat(2, 1fr); gap:6px; }}
+.stat-chip {{ background:#0A1F33; border:1px solid #16324A; border-radius:6px; padding:5px 8px; }}
+.stat-label {{ font-size:9px; color:#5C7A90; margin-bottom:2px; }}
+.stat-value {{ font-size:11.5px; color:#EAF2F8; font-weight:700;
+               font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace; }}
+
 .disclaimer {{ font-size:11px; color:#5C7A90; margin-top:20px; line-height:1.6; max-width:520px; }}
 </style>
 </head><body>
