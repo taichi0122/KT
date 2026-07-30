@@ -73,12 +73,16 @@ def build_exhibition_lookup(previews):
         return lookup
     for race in previews.get("previews", []):
         key_base = (race["race_stadium_number"], race["race_number"])
-        for _, b in race.get("boats", {}).items():
+        boats_raw = race.get("boats", {})
+        # previewsのboatsは形式が配列/オブジェクトのどちらの場合もあるため両対応する
+        boats_iter = boats_raw.values() if isinstance(boats_raw, dict) else boats_raw
+        for b in boats_iter:
             lane = b.get("racer_boat_number")
             ex = b.get("racer_exhibition_time")
             if lane is not None and ex is not None:
                 lookup[(*key_base, lane)] = ex
     return lookup
+
 
 
 def render_race(race, ex_lookup):
