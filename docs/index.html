@@ -8,18 +8,37 @@ body { font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", san
        background:#0A1929; color:#EAF2F8; margin:0; padding:20px; }
 h1 { font-size:20px; margin-bottom:4px; }
 .updated { font-size:11px; color:#5C7A90; margin-bottom:16px; }
-.race-card { background:#0F2438; border:1px solid #16324A; border-radius:10px;
-              padding:14px; margin-bottom:14px; max-width:520px; }
-.race-card h3 { margin:0 0 8px; font-size:15px; }
-.formation { color:#3EC6E0; font-size:13px; margin-left:8px; }
+
+.venue-nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; max-width:520px; }
+.venue-nav a { background:#0F2438; border:1px solid #16324A; border-radius:16px;
+                padding:6px 12px; font-size:12px; color:#3EC6E0; text-decoration:none; }
+
+.venue { max-width:520px; margin-bottom:12px; background:#0F2438; border:1px solid #16324A;
+          border-radius:10px; overflow:hidden; }
+.venue summary { list-style:none; cursor:pointer; padding:14px 16px; font-size:16px;
+                   font-weight:700; display:flex; align-items:center; gap:8px; }
+.venue summary::-webkit-details-marker { display:none; }
+.venue summary::before { content:"▸"; color:#3EC6E0; font-size:13px; transition:transform 0.15s; }
+.venue[open] summary::before { transform:rotate(90deg); }
+.race-count { font-size:12px; color:#5C7A90; font-weight:400; }
+.venue-body { padding:0 14px 14px; }
+
+.race-card { background:#14304A; border:1px solid #1E4560; border-radius:8px;
+              padding:12px; margin-bottom:10px; }
+.race-card h3 { margin:0 0 8px; font-size:14px; }
+.formation { color:#3EC6E0; font-size:12.5px; margin-left:8px; }
 table { width:100%; border-collapse:collapse; font-size:13px; }
-th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
+th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #1E4560; }
 .disclaimer { font-size:11px; color:#5C7A90; margin-top:20px; line-height:1.6; max-width:520px; }
 </style>
 </head><body>
 <h1>競艇予想 2026年07月30日</h1>
-<div class="updated">最終更新: 2026-07-30 20:26 JST</div>
+<div class="updated">最終更新: 2026-07-30 20:46 JST</div>
+<nav class="venue-nav"><a href="#venue-4">平和島</a><a href="#venue-8">常滑</a><a href="#venue-9">津</a><a href="#venue-10">三国</a><a href="#venue-11">びわこ</a><a href="#venue-15">丸亀</a><a href="#venue-16">児島</a><a href="#venue-18">徳山</a><a href="#venue-19">下関</a><a href="#venue-22">福岡</a><a href="#venue-23">唐津</a><a href="#venue-24">大村</a></nav>
 
+    <details class="venue" id="venue-4" open>
+      <summary>平和島 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>平和島 1R <span class="formation">予想: 1-5-3</span></h3>
       <table>
@@ -115,7 +134,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>西橋 奈未</td><td>6.5</td></tr><tr><td>○</td><td>2</td><td>倉持 莉々</td><td>5.3</td></tr><tr><td>▲</td><td>4</td><td>三浦 永理</td><td>4.2</td></tr><tr><td>△</td><td>5</td><td>藤原 菜希</td><td>4.2</td></tr><tr><td>△</td><td>3</td><td>川井 萌</td><td>3.9</td></tr><tr><td>△</td><td>6</td><td>原 加央理</td><td>3.7</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-8">
+      <summary>常滑 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>常滑 1R <span class="formation">予想: 1-3-2</span></h3>
       <table>
@@ -211,7 +235,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>前田 篤哉</td><td>7.1</td></tr><tr><td>○</td><td>2</td><td>若林 義人</td><td>5.1</td></tr><tr><td>▲</td><td>3</td><td>鈴木 孝明</td><td>4.4</td></tr><tr><td>△</td><td>4</td><td>中野 希一</td><td>4.4</td></tr><tr><td>△</td><td>6</td><td>廣瀬 凜</td><td>4.2</td></tr><tr><td>△</td><td>5</td><td>塚越 海斗</td><td>4.1</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-9">
+      <summary>津 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>津 1R <span class="formation">予想: 1-2-3</span></h3>
       <table>
@@ -307,7 +336,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>None</td><td>3.4</td></tr><tr><td>○</td><td>2</td><td>None</td><td>1.3</td></tr><tr><td>▲</td><td>3</td><td>None</td><td>1.0</td></tr><tr><td>△</td><td>4</td><td>None</td><td>0.7</td></tr><tr><td>△</td><td>5</td><td>None</td><td>0.6</td></tr><tr><td>△</td><td>6</td><td>None</td><td>0.5</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-10">
+      <summary>三国 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>三国 1R <span class="formation">予想: 1-2-5</span></h3>
       <table>
@@ -403,7 +437,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>篠崎 元志</td><td>7.7</td></tr><tr><td>○</td><td>3</td><td>馬場 剛</td><td>4.7</td></tr><tr><td>▲</td><td>2</td><td>高田 ひかる</td><td>4.4</td></tr><tr><td>△</td><td>4</td><td>野村 誠</td><td>3.9</td></tr><tr><td>△</td><td>5</td><td>眞鳥 康太</td><td>2.6</td></tr><tr><td>△</td><td>6</td><td>西村 秀樹</td><td>2.2</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-11">
+      <summary>びわこ <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>びわこ 1R <span class="formation">予想: 1-3-4</span></h3>
       <table>
@@ -499,7 +538,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>茅原 悠紀</td><td>7.5</td></tr><tr><td>○</td><td>3</td><td>峰 竜太</td><td>5.7</td></tr><tr><td>▲</td><td>2</td><td>篠崎 仁志</td><td>5.4</td></tr><tr><td>△</td><td>4</td><td>佐々木 完太</td><td>4.6</td></tr><tr><td>△</td><td>5</td><td>山崎 郡</td><td>4.6</td></tr><tr><td>△</td><td>6</td><td>岩瀬 裕亮</td><td>4.4</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-15">
+      <summary>丸亀 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>丸亀 1R <span class="formation">予想: 1-4-3</span></h3>
       <table>
@@ -595,7 +639,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>川野 芽唯</td><td>6.3</td></tr><tr><td>○</td><td>2</td><td>高憧 四季</td><td>4.4</td></tr><tr><td>▲</td><td>3</td><td>米丸 乃絵</td><td>3.8</td></tr><tr><td>△</td><td>6</td><td>山本 梨菜</td><td>3.2</td></tr><tr><td>△</td><td>4</td><td>藤原 早菜</td><td>2.4</td></tr><tr><td>△</td><td>5</td><td>嶋田 有里</td><td>2.1</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-16">
+      <summary>児島 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>児島 1R <span class="formation">予想: 1-2-3</span></h3>
       <table>
@@ -691,7 +740,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>中村 晃朋</td><td>7.0</td></tr><tr><td>○</td><td>3</td><td>海野 康志郎</td><td>5.1</td></tr><tr><td>▲</td><td>2</td><td>奥田 誠</td><td>4.3</td></tr><tr><td>△</td><td>4</td><td>古賀 繁輝</td><td>3.9</td></tr><tr><td>△</td><td>6</td><td>久田 武</td><td>3.4</td></tr><tr><td>△</td><td>5</td><td>香川 陽太</td><td>2.8</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-18">
+      <summary>徳山 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>徳山 1R <span class="formation">予想: 1-2-4</span></h3>
       <table>
@@ -787,7 +841,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>長尾 章平</td><td>6.9</td></tr><tr><td>○</td><td>3</td><td>市橋 卓士</td><td>4.4</td></tr><tr><td>▲</td><td>4</td><td>宮下 元胤</td><td>3.8</td></tr><tr><td>△</td><td>2</td><td>高野 心吾</td><td>3.8</td></tr><tr><td>△</td><td>6</td><td>柳橋 宏紀</td><td>3.5</td></tr><tr><td>△</td><td>5</td><td>國弘 翔平</td><td>2.9</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-19">
+      <summary>下関 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>下関 1R <span class="formation">予想: 1-2-6</span></h3>
       <table>
@@ -883,7 +942,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>渡邉 翼</td><td>6.0</td></tr><tr><td>○</td><td>2</td><td>土山 卓也</td><td>3.7</td></tr><tr><td>▲</td><td>3</td><td>平川 香織</td><td>3.7</td></tr><tr><td>△</td><td>4</td><td>平見 真彦</td><td>2.9</td></tr><tr><td>△</td><td>6</td><td>西村 美智子</td><td>2.8</td></tr><tr><td>△</td><td>5</td><td>眞鳥 章太</td><td>2.8</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-22">
+      <summary>福岡 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>福岡 1R <span class="formation">予想: 1-2-3</span></h3>
       <table>
@@ -979,7 +1043,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>笠原 亮</td><td>6.9</td></tr><tr><td>○</td><td>2</td><td>金田 諭</td><td>4.7</td></tr><tr><td>▲</td><td>6</td><td>黒野 元基</td><td>4.6</td></tr><tr><td>△</td><td>3</td><td>山下 昂大</td><td>4.1</td></tr><tr><td>△</td><td>4</td><td>石岡 将太</td><td>3.8</td></tr><tr><td>△</td><td>5</td><td>秋山 広一</td><td>3.7</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-23">
+      <summary>唐津 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>唐津 1R <span class="formation">予想: 1-6-2</span></h3>
       <table>
@@ -1075,7 +1144,12 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>竹井 貴史</td><td>7.2</td></tr><tr><td>○</td><td>2</td><td>高橋 英之</td><td>4.4</td></tr><tr><td>▲</td><td>3</td><td>篠田 優也</td><td>4.4</td></tr><tr><td>△</td><td>4</td><td>大久保 信一郎</td><td>3.8</td></tr><tr><td>△</td><td>5</td><td>末永 祐輝</td><td>3.8</td></tr><tr><td>△</td><td>6</td><td>河野 真也</td><td>3.3</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
+    <details class="venue" id="venue-24">
+      <summary>大村 <span class="race-count">(12R)</span></summary>
+      <div class="venue-body">
     <div class="race-card">
       <h3>大村 1R <span class="formation">予想: 1-2-6</span></h3>
       <table>
@@ -1171,6 +1245,8 @@ th, td { padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }
         <tbody><tr><td>◎</td><td>1</td><td>刑部 亜里紗</td><td>5.6</td></tr><tr><td>○</td><td>2</td><td>松本 怜</td><td>3.3</td></tr><tr><td>▲</td><td>4</td><td>真子 奈津実</td><td>2.5</td></tr><tr><td>△</td><td>5</td><td>宮城 那菜</td><td>1.7</td></tr><tr><td>△</td><td>3</td><td>赤松 咲香</td><td>1.2</td></tr><tr><td>△</td><td>6</td><td>小畑 楓夏</td><td>1.0</td></tr></tbody>
       </table>
     </div>
+    </div>
+    </details>
     
 <div class="disclaimer">
 このページは非公式オープンAPI（BoatraceOpenAPI）を利用した個人の分析ツールで、BOATRACE公式・関連団体とは一切関係ありません。
