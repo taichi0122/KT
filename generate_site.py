@@ -84,7 +84,6 @@ def build_exhibition_lookup(previews):
     return lookup
 
 
-
 def render_race(race, ex_lookup):
     stadium = race["race_stadium_number"]
     race_no = race["race_number"]
@@ -117,22 +116,47 @@ def render_race(race, ex_lookup):
     """
 
 
+def render_venue_section(stadium, races_for_venue, ex_lookup, is_first):
+    venue_name = STADIUM_NAMES.get(stadium, f"場{stadium}")
+    anchor = f"venue-{stadium}"
+    cards = "".join(render_race(race, ex_lookup) for race in races_for_venue)
+    open_attr = " open" if is_first else ""
+    return f"""
+    <details class="venue" id="{anchor}"{open_attr}>
+      <summary>{venue_name} <span class="race-count">({len(races_for_venue)}R)</span></summary>
+      <div class="venue-body">{cards}</div>
+    </details>
+    """
+
+
 def main():
     programs = fetch(PROGRAMS_URL)
     previews = fetch(PREVIEWS_URL)
     ex_lookup = build_exhibition_lookup(previews)
 
-    races_html = []
+    venues_html = []
+    nav_html = ""
     if programs:
-        races = sorted(
-            programs.get("programs", []),
-            key=lambda r: (r["race_stadium_number"], r["race_number"]),
-        )
+        races = programs.get("programs", [])
+        by_stadium = {}
         for race in races:
-            races_html.append(render_race(race, ex_lookup))
+            by_stadium.setdefault(race["race_stadium_number"], []).append(race)
+
+        stadium_order = sorted(by_stadium.keys())
+        for s in stadium_order:
+            by_stadium[s].sort(key=lambda r: r["race_number"])
+
+        nav_links = []
+        for s in stadium_order:
+            name = STADIUM_NAMES.get(s, f"場{s}")
+            nav_links.append(f'<a href="#venue-{s}">{name}</a>')
+        nav_html = f'<nav class="venue-nav">{"".join(nav_links)}</nav>' if nav_links else ""
+
+        for i, s in enumerate(stadium_order):
+            venues_html.append(render_venue_section(s, by_stadium[s], ex_lookup, is_first=(i == 0)))
 
     date_str = today.strftime("%Y年%m月%d日")
-    body = "".join(races_html) if races_html else (
+    body = "".join(venues_html) if venues_html else (
         "<p>本日のレースデータがまだ取得できていません"
         "（非開催日、またはデータ反映待ちの可能性があります）。</p>"
     )
@@ -148,17 +172,33 @@ body {{ font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sa
        background:#0A1929; color:#EAF2F8; margin:0; padding:20px; }}
 h1 {{ font-size:20px; margin-bottom:4px; }}
 .updated {{ font-size:11px; color:#5C7A90; margin-bottom:16px; }}
-.race-card {{ background:#0F2438; border:1px solid #16324A; border-radius:10px;
-              padding:14px; margin-bottom:14px; max-width:520px; }}
-.race-card h3 {{ margin:0 0 8px; font-size:15px; }}
-.formation {{ color:#3EC6E0; font-size:13px; margin-left:8px; }}
+
+.venue-nav {{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; max-width:520px; }}
+.venue-nav a {{ background:#0F2438; border:1px solid #16324A; border-radius:16px;
+                padding:6px 12px; font-size:12px; color:#3EC6E0; text-decoration:none; }}
+
+.venue {{ max-width:520px; margin-bottom:12px; background:#0F2438; border:1px solid #16324A;
+          border-radius:10px; overflow:hidden; }}
+.venue summary {{ list-style:none; cursor:pointer; padding:14px 16px; font-size:16px;
+                   font-weight:700; display:flex; align-items:center; gap:8px; }}
+.venue summary::-webkit-details-marker {{ display:none; }}
+.venue summary::before {{ content:"▸"; color:#3EC6E0; font-size:13px; transition:transform 0.15s; }}
+.venue[open] summary::before {{ transform:rotate(90deg); }}
+.race-count {{ font-size:12px; color:#5C7A90; font-weight:400; }}
+.venue-body {{ padding:0 14px 14px; }}
+
+.race-card {{ background:#14304A; border:1px solid #1E4560; border-radius:8px;
+              padding:12px; margin-bottom:10px; }}
+.race-card h3 {{ margin:0 0 8px; font-size:14px; }}
+.formation {{ color:#3EC6E0; font-size:12.5px; margin-left:8px; }}
 table {{ width:100%; border-collapse:collapse; font-size:13px; }}
-th, td {{ padding:4px 6px; text-align:left; border-bottom:1px solid #16324A; }}
+th, td {{ padding:4px 6px; text-align:left; border-bottom:1px solid #1E4560; }}
 .disclaimer {{ font-size:11px; color:#5C7A90; margin-top:20px; line-height:1.6; max-width:520px; }}
 </style>
 </head><body>
 <h1>競艇予想 {date_str}</h1>
 <div class="updated">最終更新: {generated_at}</div>
+{nav_html}
 {body}
 <div class="disclaimer">
 このページは非公式オープンAPI（BoatraceOpenAPI）を利用した個人の分析ツールで、BOATRACE公式・関連団体とは一切関係ありません。
