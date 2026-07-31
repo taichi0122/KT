@@ -104,7 +104,7 @@ def build_exhibition_lookup(previews):
     return lookup
 
 
-def render_boat_card(rank, sc, b, ex_time):
+def render_boat_card(rank, sc, b, ex_raw):
     lane = b["racer_boat_number"]
     lane_bg, lane_text = LANE_COLOR.get(lane, ("#0F2438", "#EAF2F8"))
     accent = LANE_ACCENT.get(lane, "#3EC6E0")
@@ -129,6 +129,7 @@ def render_boat_card(rank, sc, b, ex_time):
     st = b.get("racer_average_start_timing") or 0.17
     flying = b.get("racer_flying_count") or 0
     late = b.get("racer_late_count") or 0
+    ex_display = f"{ex_raw:.2f}秒" if ex_raw else "未計測"
 
     class_badge = (
         f'<span class="class-badge" style="background:{cls_bg};color:{cls_text};border-color:{cls_border}">{cls}</span>'
@@ -168,7 +169,7 @@ def render_boat_card(rank, sc, b, ex_time):
         <div class="stat-chip"><div class="stat-label">ボート2連率</div>
           <div class="stat-value">{boat2:.1f}%</div></div>
         <div class="stat-chip"><div class="stat-label">展示タイム</div>
-          <div class="stat-value">{ex_time:.2f}秒</div></div>
+          <div class="stat-value">{ex_display}</div></div>
         <div class="stat-chip"><div class="stat-label">平均ST</div>
           <div class="stat-value">{st:.2f}</div></div>
         <div class="stat-chip"><div class="stat-label">F数 / L数</div>
@@ -184,14 +185,15 @@ def render_race(race, ex_lookup):
     boats = race.get("boats", [])
     scored = []
     for b in boats:
-        ex = ex_lookup.get((stadium, race_no, b["racer_boat_number"]), 7.1)
-        scored.append((score_boat(b, ex), b, ex))
+        ex_raw = ex_lookup.get((stadium, race_no, b["racer_boat_number"]))  # None=未計測
+        ex_for_score = ex_raw if ex_raw else 7.1  # 0/None は中立値でスコアに影響させない
+        scored.append((score_boat(b, ex_for_score), b, ex_raw))
     scored.sort(key=lambda x: -x[0])
 
     venue_name = STADIUM_NAMES.get(stadium, f"場{stadium}")
     formation = "-".join(str(b["racer_boat_number"]) for _, b, _ in scored[:3])
     cards = "".join(
-        render_boat_card(i, sc, b, ex) for i, (sc, b, ex) in enumerate(scored)
+        render_boat_card(i, sc, b, ex_raw) for i, (sc, b, ex_raw) in enumerate(scored)
     )
 
     return f"""
